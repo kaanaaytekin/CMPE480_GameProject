@@ -1,0 +1,77 @@
+.title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: var(--sp-2);
+}
+
+.sub {
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: var(--sp-6);
+}
+
+.grid {
+    display: flex;
+    gap: var(--sp-4);
+    justify-content: center;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-2);
+    padding: var(--sp-5) var(--sp-4);
+    border-radius: var(--r-lg);
+    background: rgba(15, 28, 55, 0.8);
+    border: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+    min-width: 110px;
+    transition: border-color var(--t-fast), background var(--t-fast);
+    font-family: 'Inter', sans-serif;
+}
+.card:hover {
+    border-color: rgba(255,255,255,0.18);
+    background: rgba(22, 40, 75, 0.9);
+}
+
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--avatar-color) 20%, transparent);
+    border: 2px solid var(--avatar-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--avatar-color);
+    box-shadow: 0 0 16px color-mix(in srgb, var(--avatar-color) 30%, transparent);
+}
+
+.name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.title {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+}
+
+.callLabel {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}

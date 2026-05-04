@@ -1,0 +1,191 @@
+.screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--sp-6);
+    background: radial-gradient(ellipse 80% 70% at 50% 30%, #0d1e40 0%, #070c18 70%);
+    position: relative;
+    overflow: hidden;
+}
+
+.orb1, .orb2 {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+}
+.orb1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(30, 60, 140, 0.25) 0%, transparent 70%);
+    top: -100px; left: -150px;
+    animation: drift1 12s ease-in-out infinite alternate;
+}
+.orb2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(10, 80, 60, 0.18) 0%, transparent 70%);
+    bottom: -80px; right: -80px;
+    animation: drift2 15s ease-in-out infinite alternate;
+}
+@keyframes drift1 { to { transform: translate(40px, 30px); } }
+@keyframes drift2 { to { transform: translate(-30px, -20px); } }
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-6);
+    width: 100%;
+    max-width: 480px;
+    position: relative;
+    z-index: 1;
+}
+
+.header { text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--sp-3); }
+
+.logoWrap { font-size: 42px; line-height: 1; }
+.diamond {
+    color: var(--gold);
+    text-shadow: 0 0 24px rgba(232,184,75,0.5);
+    animation: diamondPulse 2.8s ease-in-out infinite;
+    display: inline-block;
+}
+@keyframes diamondPulse {
+    0%, 100% { text-shadow: 0 0 18px rgba(232,184,75,0.4); filter: brightness(1); }
+    50%       { text-shadow: 0 0 40px rgba(232,184,75,0.75), 0 0 80px rgba(232,184,75,0.25); filter: brightness(1.25); }
+}
+
+.title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(28px, 6vw, 42px);
+    font-weight: 900;
+    line-height: 1.15;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 380px;
+}
+.subtitle strong { color: var(--gold); }
+
+.cardWrap { width: 100%; }
+.card { width: 100%; display: flex; flex-direction: column; gap: var(--sp-4); }
+
+.label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.inputRow { position: relative; }
+
+.input {
+    width: 100%;
+    padding: 14px 48px 14px 16px;
+    border-radius: var(--r-md);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(77,159,255,0.25);
+    color: var(--text-primary);
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color var(--t-normal), box-shadow var(--t-normal);
+    caret-color: var(--blue);
+    user-select: text;
+    -webkit-user-select: text;
+}
+.input::placeholder { color: var(--text-muted); }
+.input:focus {
+    border-color: rgba(77,159,255,0.55);
+    box-shadow: 0 0 0 3px rgba(77,159,255,0.1);
+}
+
+.charCount {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.error {
+    font-size: 13px;
+    color: var(--red);
+    padding: 8px 12px;
+    border-radius: var(--r-sm);
+    background: var(--red-dim);
+    border: 1px solid rgba(248,113,113,0.2);
+}
+
+.actions {
+    display: flex;
+    gap: var(--sp-3);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Modal styles */
+.modalTitle {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: var(--sp-4);
+}
+
+.modalBody {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: var(--sp-6);
+}
+
+.howToList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+    margin-bottom: var(--sp-2);
+}
+
+.howToItem {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sp-4);
+    padding: var(--sp-3) var(--sp-4);
+    border-radius: var(--r-md);
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--glass-border);
+}
+
+.howToIcon {
+    font-size: 22px;
+    width: 32px;
+    text-align: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.howToTitle {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 0.03em;
+}
+
+.howToDesc {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+}

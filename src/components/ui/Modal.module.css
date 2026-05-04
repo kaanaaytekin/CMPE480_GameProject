@@ -1,0 +1,20 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 8, 18, 0.72);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: var(--sp-4);
+}
+
+.panel {
+    width: 100%;
+    background: rgba(10, 18, 36, 0.96);
+    border: 1px solid rgba(77, 159, 255, 0.2);
+    border-radius: var(--r-xl);
+    box-shadow: var(--shadow-xl), 0 0 0 1px rgba(255,255,255,0.04);
+    padding: var(--sp-8);
+}

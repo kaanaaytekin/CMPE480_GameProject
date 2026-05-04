@@ -1,0 +1,58 @@
+/* ─── Design Tokens ─────────────────────────────────────────── */
+:root {
+    /* Backgrounds */
+    --bg-app:          #070c18;
+    --bg-surface:      #0c1428;
+    --bg-raised:       #111d38;
+    --bg-elevated:     #162240;
+
+    /* Glass */
+    --glass-bg:        rgba(12, 22, 45, 0.72);
+    --glass-bg-hover:  rgba(20, 36, 68, 0.85);
+    --glass-border:    rgba(255, 255, 255, 0.08);
+    --glass-border-hi: rgba(255, 255, 255, 0.14);
+
+    /* Text */
+    --text-primary:   #e2e8f5;
+    --text-secondary: #8899bb;
+    --text-muted:     #3d5070;
+
+    /* Accents */
+    --blue:           #4d9fff;
+    --blue-dim:       rgba(77, 159, 255, 0.15);
+    --blue-glow:      0 0 24px rgba(77, 159, 255, 0.22), 0 0 48px rgba(77, 159, 255, 0.10);
+    --gold:           #e8b84b;
+    --gold-dim:       rgba(232, 184, 75, 0.15);
+    --gold-glow:      0 0 24px rgba(232, 184, 75, 0.28);
+    --green:          #34d399;
+    --green-dim:      rgba(52, 211, 153, 0.15);
+    --green-glow:     0 0 24px rgba(52, 211, 153, 0.22);
+    --red:            #f87171;
+    --red-dim:        rgba(248, 113, 113, 0.15);
+    --red-glow:       0 0 24px rgba(248, 113, 113, 0.22);
+    --teal:           #22d3ee;
+
+    /* Border radius */
+    --r-xs:  6px;
+    --r-sm:  8px;
+    --r-md:  12px;
+    --r-lg:  16px;
+    --r-xl:  20px;
+    --r-2xl: 28px;
+
+    /* Shadows */
+    --shadow-sm:  0 2px 8px rgba(0,0,0,0.35);
+    --shadow-md:  0 8px 24px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.3);
+    --shadow-lg:  0 16px 48px rgba(0,0,0,0.55), 0 4px 16px rgba(0,0,0,0.4);
+    --shadow-xl:  0 32px 80px rgba(0,0,0,0.6), 0 8px 32px rgba(0,0,0,0.4);
+
+    /* Spacing */
+    --sp-1: 4px;   --sp-2: 8px;   --sp-3: 12px;
+    --sp-4: 16px;  --sp-5: 20px;  --sp-6: 24px;
+    --sp-8: 32px;  --sp-10: 40px; --sp-12: 48px;
+
+    /* Transitions */
+    --t-fast:   0.12s ease;
+    --t-normal: 0.22s ease;
+    --t-slow:   0.35s ease;
+}

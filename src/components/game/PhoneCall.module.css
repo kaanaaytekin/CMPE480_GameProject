@@ -1,0 +1,47 @@
+.wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-4);
+    text-align: center;
+}
+
+.avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--c) 18%, transparent);
+    border: 2px solid var(--c);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--c);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--c) 25%, transparent);
+}
+
+.name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gold);
+}
+
+.suggestion {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+.suggestion strong {
+    color: var(--blue);
+    font-weight: 700;
+}
+
+.confidence {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-style: italic;
+}
