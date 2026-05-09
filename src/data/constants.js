@@ -1,5 +1,15 @@
 export const ANSWER_LABELS = ['A', 'B', 'C', 'D'];
 
+/* Set to true during demos — correct answer will always appear as option A */
+export const DEMO_MODE = true;
+
+/* Seconds allowed per difficulty level */
+export const QUESTION_TIMES = {
+    easy:   20,
+    medium: 40,
+    hard:   60,
+};
+
 export const DIFFICULTY_LABELS = {
     easy:   'Easy',
     medium: 'Medium',

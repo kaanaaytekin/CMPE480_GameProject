@@ -2,7 +2,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: radial-gradient(ellipse 100% 60% at 40% 0%, #0e1f40 0%, #070c18 55%);
+    background: radial-gradient(ellipse 100% 60% at 40% 0%, var(--grad-a) 0%, var(--grad-b) 55%);
 }
 
 /* Header */
@@ -11,7 +11,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 14px var(--sp-8);
-    background: rgba(8, 14, 28, 0.85);
+    background: var(--header-bg);
     backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--glass-border);
     position: sticky;
@@ -121,6 +121,16 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--sp-3);
+}
+
+.answersTF {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-3);
+}
+
+.answersTF > * {
+    min-height: 100px;
 }
 
 /* Walk Away */

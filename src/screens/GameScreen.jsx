@@ -4,6 +4,8 @@ import { useLifelines } from '../hooks/useLifelines';
 import { useTimer } from '../hooks/useTimer';
 import { QuestionPanel } from '../components/game/QuestionPanel';
 import { AnswerButton } from '../components/game/AnswerButton';
+import { FillBlankInput } from '../components/game/FillBlankInput';
+import { MatchingBoard } from '../components/game/MatchingBoard';
 import { LifelineBar } from '../components/game/LifelineBar';
 import { PrizeLadder } from '../components/game/PrizeLadder';
 import { TimerBar } from '../components/game/TimerBar';
@@ -12,6 +14,8 @@ import { PhoneCall } from '../components/game/PhoneCall';
 import { AudienceChart } from '../components/game/AudienceChart';
 import { formatMoney } from '../utils/format';
 import { sound } from '../utils/sound';
+import { useTheme } from '../hooks/useTheme';
+import { QUESTION_TIMES } from '../data/constants';
 import s from './GameScreen.module.css';
 
 function getButtonState({ idx, selectedIndex, answerState, correctIndex, hiddenAnswers }) {
@@ -41,7 +45,8 @@ export function GameScreen({ game }) {
     });
 
     const timerActive = answerState === 'idle' && lifelines.modal === null;
-    const timer = useTimer({ active: timerActive, questionId: currentQuestion?.id });
+    const questionDuration = QUESTION_TIMES[currentQuestion?.difficulty] ?? 20;
+    const timer = useTimer({ active: timerActive, questionId: currentQuestion?.id, duration: questionDuration });
     timer.setOnExpire(timeUp);
 
     const handleLifeline = (key) => {
@@ -51,9 +56,11 @@ export function GameScreen({ game }) {
     };
 
     const isLocked = answerState !== 'idle';
+    const qType = currentQuestion?.type ?? 'mcq';
     const [confirmWalk, setConfirmWalk] = useState(false);
     const [muted, setMuted] = useState(false);
     const toggleMute = () => setMuted(sound.toggleMute());
+    const { theme, toggleTheme } = useTheme();
 
     return (
         <div className={s.screen}>
@@ -64,6 +71,21 @@ export function GameScreen({ game }) {
                     <span className={s.brand}>ISO 29119 Millionaire</span>
                 </div>
                 <div className={s.headerRight}>
+                    <button className={s.muteBtn} onClick={toggleTheme} title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
+                        {theme === 'dark' ? (
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="12" cy="12" r="5"/>
+                                <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                                <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                            </svg>
+                        ) : (
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                            </svg>
+                        )}
+                    </button>
                     <button className={s.muteBtn} onClick={toggleMute} title={muted ? 'Unmute' : 'Mute'}>
                         {muted ? (
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -96,28 +118,46 @@ export function GameScreen({ game }) {
 
                     <TimerBar timeLeft={timer.timeLeft} ratio={timer.ratio} />
 
-                    <div className={s.answers}>
-                        {[0, 1, 2, 3].map(idx => (
-                            <AnswerButton
-                                key={idx}
-                                index={idx}
-                                text={currentQuestion?.options[idx] ?? ''}
-                                state={getButtonState({
-                                    idx,
-                                    selectedIndex,
-                                    answerState,
-                                    correctIndex: currentQuestion?.answer,
-                                    hiddenAnswers,
-                                })}
-                                onClick={() => selectAnswer(idx)}
-                            />
-                        ))}
-                    </div>
+                    {qType === 'fitb' ? (
+                        <FillBlankInput
+                            answerState={answerState}
+                            onSubmit={(text) => selectAnswer(text)}
+                            acceptedAnswers={currentQuestion?.acceptedAnswers}
+                            lockedValue={typeof selectedIndex === 'string' ? selectedIndex : null}
+                        />
+                    ) : qType === 'match' ? (
+                        <MatchingBoard
+                            pairs={currentQuestion?.pairs ?? []}
+                            questionId={currentQuestion?.id}
+                            answerState={answerState}
+                            onSubmit={(data) => selectAnswer(data)}
+                        />
+                    ) : (
+                        <div className={qType === 'tf' ? s.answersTF : s.answers}>
+                            {(qType === 'tf' ? [0, 1] : [0, 1, 2, 3]).map(idx => (
+                                <AnswerButton
+                                    key={idx}
+                                    index={idx}
+                                    text={currentQuestion?.options[idx] ?? ''}
+                                    state={getButtonState({
+                                        idx,
+                                        selectedIndex,
+                                        answerState,
+                                        correctIndex: currentQuestion?.answer,
+                                        hiddenAnswers,
+                                    })}
+                                    onClick={() => selectAnswer(idx)}
+                                    hideLabel={qType === 'tf'}
+                                />
+                            ))}
+                        </div>
+                    )}
 
                     <LifelineBar
                         used={lifelines.used}
                         onUse={handleLifeline}
                         disabled={isLocked}
+                        questionType={qType}
                     />
 
                     {/* Walk Away */}

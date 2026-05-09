@@ -8,8 +8,8 @@
     overflow: hidden;
 }
 
-.winBg  { background: radial-gradient(ellipse 80% 60% at 50% 20%, #1a3a14 0%, #070c18 60%); }
-.loseBg { background: radial-gradient(ellipse 80% 60% at 50% 20%, #0e1e3a 0%, #070c18 60%); }
+.winBg  { background: radial-gradient(ellipse 80% 60% at 50% 20%, var(--end-win-a)  0%, var(--end-win-b)  60%); }
+.loseBg { background: radial-gradient(ellipse 80% 60% at 50% 20%, var(--end-lose-a) 0%, var(--end-lose-b) 60%); }
 
 .orb {
     position: absolute;

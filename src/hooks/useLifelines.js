@@ -13,6 +13,7 @@ export function useLifelines({ currentQuestion, hiddenAnswers, setHiddenAnswers,
 
     const useFiftyFifty = useCallback(() => {
         if (!currentQuestion || used.fifty) return;
+        if (currentQuestion.type === 'tf' || currentQuestion.type === 'fitb' || currentQuestion.type === 'match') return;
         sound.lifeline();
         markUsed('fifty');
         const wrong = shuffle([0, 1, 2, 3].filter(i => i !== currentQuestion.answer && !hiddenAnswers.has(i)));
@@ -31,16 +32,48 @@ export function useLifelines({ currentQuestion, hiddenAnswers, setHiddenAnswers,
     const selectExpert = useCallback((expert) => {
         if (!currentQuestion) return;
         const givesCorrect = Math.random() < 0.9;
+
+        if (currentQuestion.type === 'fitb') {
+            // null label → PhoneCall shows "I can't give a confident answer"
+            const suggestionLabel = givesCorrect
+                ? (currentQuestion.acceptedAnswers?.[0] ?? '?')
+                : null;
+            setPhoneData({ expert, suggestionLabel, confident: givesCorrect });
+            setModal('phoneCall');
+            return;
+        }
+
+        if (currentQuestion.type === 'match') {
+            const pairs = currentQuestion.pairs ?? [];
+            if (pairs.length === 0) return;
+            const correctPair = pairs[Math.floor(Math.random() * pairs.length)];
+            let suggestionLabel;
+            if (givesCorrect) {
+                suggestionLabel = `"${correctPair.left}" → "${correctPair.right}"`;
+            } else {
+                const otherRights = pairs.filter(p => p !== correctPair).map(p => p.right);
+                const wrongRight = otherRights.length > 0 ? otherRights[0] : '?';
+                suggestionLabel = `"${correctPair.left}" → "${wrongRight}"`;
+            }
+            setPhoneData({ expert, suggestionLabel, confident: givesCorrect, isMatch: true });
+            setModal('phoneCall');
+            return;
+        }
+
         const available = shuffle([0, 1, 2, 3].filter(i => i !== currentQuestion.answer && !hiddenAnswers.has(i)));
         const suggestion = givesCorrect || available.length === 0
             ? currentQuestion.answer
             : available[0];
-        setPhoneData({ expert, suggestionLabel: ANSWER_LABELS[suggestion], confident: givesCorrect });
+        const suggestionLabel = currentQuestion.type === 'tf'
+            ? currentQuestion.options[suggestion]
+            : ANSWER_LABELS[suggestion];
+        setPhoneData({ expert, suggestionLabel, confident: givesCorrect });
         setModal('phoneCall');
     }, [currentQuestion, hiddenAnswers]);
 
     const useAudience = useCallback(() => {
         if (!currentQuestion || used.audience) return;
+        if (currentQuestion.type === 'tf' || currentQuestion.type === 'fitb' || currentQuestion.type === 'match') return;
         sound.lifeline();
         markUsed('audience');
         setAudienceData({ percentages: createAudiencePercentages(currentQuestion.answer) });

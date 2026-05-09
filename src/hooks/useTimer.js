@@ -1,16 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { sound } from '../utils/sound';
 
-export const QUESTION_TIME = 20; // seconds — change here to adjust globally
-
-export function useTimer({ active, questionId }) {
-    const [timeLeft, setTimeLeft] = useState(QUESTION_TIME);
+export function useTimer({ active, questionId, duration = 20 }) {
+    const [timeLeft, setTimeLeft] = useState(duration);
     const onExpireRef = useRef(null);
 
-    // Reset timer on new question
+    // Reset timer when question or duration changes
     useEffect(() => {
-        setTimeLeft(QUESTION_TIME);
-    }, [questionId]);
+        setTimeLeft(duration);
+    }, [questionId, duration]);
 
     // Tick
     useEffect(() => {
@@ -28,7 +26,7 @@ export function useTimer({ active, questionId }) {
         }, 1000);
 
         return () => clearInterval(id);
-    }, [active, questionId]); // restart interval only when question changes or active toggles
+    }, [active, questionId]);
 
     // Tick sound for last 5 seconds
     useEffect(() => {
@@ -39,7 +37,7 @@ export function useTimer({ active, questionId }) {
 
     return {
         timeLeft,
-        ratio: timeLeft / QUESTION_TIME,
+        ratio: timeLeft / duration,
         setOnExpire: (fn) => { onExpireRef.current = fn; },
     };
 }

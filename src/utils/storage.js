@@ -1,4 +1,5 @@
-import { LEADERBOARD_KEY, PLAYER_NAME_KEY, LEADERBOARD_SIZE } from '../data/constants';
+import { PLAYER_NAME_KEY } from '../data/constants';
+import { supabase } from './supabase';
 
 export function loadPlayerName() {
     try { return localStorage.getItem(PLAYER_NAME_KEY) ?? ''; }
@@ -10,23 +11,25 @@ export function savePlayerName(name) {
     catch { /* ignore */ }
 }
 
-export function loadLeaderboard() {
-    try {
-        const parsed = JSON.parse(localStorage.getItem(LEADERBOARD_KEY) ?? '[]');
-        if (!Array.isArray(parsed)) return [];
-        return parsed
-            .filter(e => typeof e.name === 'string' && Number.isFinite(e.score))
-            .sort((a, b) => b.score - a.score || a.date - b.date);
-    } catch { return []; }
+export async function loadLeaderboard() {
+    const { data, error } = await supabase
+        .from('scores')
+        .select('name, score, won, walked_away, created_at')
+        .order('score', { ascending: false })
+        .order('created_at', { ascending: true });
+    if (error) { console.error('Leaderboard fetch error:', error); return []; }
+    return (data ?? []).map(r => ({
+        name: r.name,
+        score: r.score,
+        won: r.won,
+        walkedAway: r.walked_away,
+        date: new Date(r.created_at).getTime(),
+    }));
 }
 
-export function saveScore(name, score, won, walkedAway = false) {
-    const entry = { name: name || 'Player', score, won, walkedAway, date: Date.now() };
-    const sorted = [...loadLeaderboard(), entry]
-        .sort((a, b) => b.score - a.score || a.date - b.date);
-    const rank = sorted.findIndex(e => e.date === entry.date && e.name === entry.name) + 1;
-    try {
-        localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(sorted.slice(0, LEADERBOARD_SIZE)));
-    } catch { /* ignore */ }
-    return rank;
+export async function saveScore(name, score, won, walkedAway = false) {
+    const { error } = await supabase
+        .from('scores')
+        .insert({ name: name || 'Player', score, won, walked_away: walkedAway });
+    if (error) console.error('Score save error:', error);
 }

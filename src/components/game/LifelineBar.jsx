@@ -8,25 +8,31 @@ const LIFELINES = [
     { key: 'audience', Icon: AudienceIcon,   label: 'Ask the Audience' },
 ];
 
-export function LifelineBar({ used, onUse, disabled }) {
+const MCQ_ONLY = new Set(['fifty', 'audience']);
+
+export function LifelineBar({ used, onUse, disabled, questionType }) {
+    const isNonMcq = questionType === 'tf' || questionType === 'fitb' || questionType === 'match';
     return (
         <div className={s.bar}>
             {LIFELINES.map(({ key, Icon, label }) => {
                 const isUsed = used[key];
+                const notApplicable = isNonMcq && MCQ_ONLY.has(key);
+                const isDisabled = isUsed || disabled || notApplicable;
                 return (
                     <motion.button
                         key={key}
-                        className={`${s.btn} ${isUsed ? s.used : ''}`}
-                        onClick={() => !isUsed && !disabled && onUse(key)}
-                        disabled={isUsed || disabled}
-                        whileHover={!isUsed && !disabled ? { scale: 1.04 } : {}}
-                        whileTap={!isUsed && !disabled ? { scale: 0.96 } : {}}
+                        className={`${s.btn} ${isUsed ? s.used : ''} ${notApplicable ? s.na : ''}`}
+                        onClick={() => !isDisabled && onUse(key)}
+                        disabled={isDisabled}
+                        whileHover={!isDisabled ? { scale: 1.04 } : {}}
+                        whileTap={!isDisabled ? { scale: 0.96 } : {}}
                         transition={{ type: 'spring', stiffness: 400, damping: 26 }}
-                        title={isUsed ? `${label} (used)` : label}
+                        title={notApplicable ? `${label} (not available for this question type)` : isUsed ? `${label} (used)` : label}
                     >
                         <span className={s.icon}><Icon size={22} /></span>
                         <span className={s.label}>{label}</span>
                         {isUsed && <span className={s.usedBadge}>Used</span>}
+                        {notApplicable && <span className={s.usedBadge}>N/A</span>}
                     </motion.button>
                 );
             })}

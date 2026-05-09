@@ -12,8 +12,8 @@
     gap: 4px;
     padding: 10px 20px;
     border-radius: var(--r-md);
-    background: rgba(14, 26, 52, 0.7);
-    border: 1px solid rgba(232, 184, 75, 0.3);
+    background: var(--surface-lifeline);
+    border: 1px solid var(--border-lifeline);
     color: var(--gold);
     cursor: pointer;
     transition: background var(--t-fast), box-shadow var(--t-fast), border-color var(--t-fast);
@@ -40,6 +40,13 @@
 
 .used {
     opacity: 0.3;
+    cursor: not-allowed;
+    border-color: rgba(61, 80, 112, 0.3);
+    color: var(--text-muted);
+}
+
+.na {
+    opacity: 0.25;
     cursor: not-allowed;
     border-color: rgba(61, 80, 112, 0.3);
     color: var(--text-muted);

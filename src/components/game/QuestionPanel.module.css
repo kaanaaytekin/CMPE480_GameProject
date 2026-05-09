@@ -1,6 +1,6 @@
 .wrap {
-    background: rgba(10, 20, 42, 0.75);
-    border: 1px solid rgba(77, 159, 255, 0.18);
+    background: var(--surface-question);
+    border: 1px solid var(--border-question);
     border-radius: var(--r-lg);
     padding: var(--sp-8);
     box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255,255,255,0.04);

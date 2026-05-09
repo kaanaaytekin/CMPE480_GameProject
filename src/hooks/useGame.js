@@ -39,27 +39,53 @@ export function useGame() {
         setScreen('game');
     }, [setPlayerName]);
 
-    const selectAnswer = useCallback((index, currentQuestion, cIndex, name) => {
+    const normalize = (s) =>
+        String(s)
+            .toLowerCase()
+            .replace(/[-–—]/g, ' ')      // hyphens/dashes → space
+            .replace(/[^\w\s]/g, '')     // strip remaining punctuation
+            .trim()
+            .replace(/\s+/g, ' ');       // collapse whitespace
+
+    const selectAnswer = useCallback((indexOrText, currentQuestion, cIndex, name) => {
         if (answerState !== 'idle') return;
 
-        setSelectedIndex(index);
+        const isFitb  = currentQuestion?.type === 'fitb';
+        const isMatch = currentQuestion?.type === 'match';
+        setSelectedIndex(indexOrText);
         setAnswerState('locking');
         setFeedbackMsg('Locking in your answer...');
         sound.lock();
 
         after(() => {
             setAnswerState('revealed');
-            const correctIndex = currentQuestion.answer;
 
-            if (index !== correctIndex) {
-                sound.wrong();
-                setFeedbackMsg(
-                    `Incorrect. The correct answer was ${ANSWER_LABELS[correctIndex]}.`
+            let isCorrect;
+            let correctDisplay;
+            if (isFitb) {
+                isCorrect = (currentQuestion.acceptedAnswers ?? []).some(
+                    a => normalize(a) === normalize(indexOrText)
                 );
+                correctDisplay = currentQuestion.acceptedAnswers?.[0] ?? '';
+            } else if (isMatch) {
+                const { connections, rightItems } = indexOrText;
+                isCorrect = (currentQuestion.pairs ?? []).every((pair, i) => {
+                    const j = connections[i];
+                    return j !== undefined && rightItems[j] === pair.right;
+                });
+                correctDisplay = (currentQuestion.pairs ?? []).map(p => `${p.left} → ${p.right}`).join('; ');
+            } else {
+                isCorrect = indexOrText === currentQuestion.answer;
+                correctDisplay = `${ANSWER_LABELS[currentQuestion.answer]}: ${currentQuestion.options?.[currentQuestion.answer] ?? ''}`;
+            }
+
+            if (!isCorrect) {
+                sound.wrong();
+                setFeedbackMsg(`Incorrect. Correct answer: ${correctDisplay}.`);
                 after(() => {
                     const finalPrize = getSafePrize(cIndex);
-                    const rank = saveScore(name, finalPrize, false);
-                    setResult({ won: false, lostQuestion: currentQuestion, selectedIndex: index, finalPrize, rank });
+                    saveScore(name, finalPrize, false);
+                    setResult({ won: false, lostQuestion: currentQuestion, selectedIndex: indexOrText, finalPrize });
                     setScreen('end');
                 }, 2200);
             } else {
@@ -69,8 +95,8 @@ export function useGame() {
                     sound.win();
                     setFeedbackMsg(`Correct! The grand prize is yours: ${formatMoney(prize)} TL!`);
                     after(() => {
-                        const rank = saveScore(name, prize, true);
-                        setResult({ won: true, finalPrize: prize, rank });
+                        saveScore(name, prize, true);
+                        setResult({ won: true, finalPrize: prize });
                         setScreen('end');
                     }, 1800);
                 } else {
@@ -96,8 +122,8 @@ export function useGame() {
         setFeedbackMsg("Time's up! Here is the correct answer.");
         after(() => {
             const finalPrize = getSafePrize(cIndex);
-            const rank = saveScore(name, finalPrize, false);
-            setResult({ won: false, lostQuestion: currentQuestion, selectedIndex: null, finalPrize, rank });
+            saveScore(name, finalPrize, false);
+            setResult({ won: false, lostQuestion: currentQuestion, selectedIndex: null, finalPrize });
             setScreen('end');
         }, 2200);
     }, [answerState]);
@@ -106,8 +132,8 @@ export function useGame() {
         clearAll();
         sound.walkAway();
         const finalPrize = getSafePrize(cIndex);
-        const rank = saveScore(name, finalPrize, false, true);
-        setResult({ won: false, walkedAway: true, finalPrize, rank });
+        saveScore(name, finalPrize, false, true);
+        setResult({ won: false, walkedAway: true, finalPrize });
         setScreen('end');
     }, []);
 

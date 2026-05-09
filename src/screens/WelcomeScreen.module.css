@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: center;
     padding: var(--sp-6);
-    background: radial-gradient(ellipse 80% 70% at 50% 30%, #0d1e40 0%, #070c18 70%);
+    background: radial-gradient(ellipse 80% 70% at 50% 30%, var(--grad-a) 0%, var(--grad-b) 70%);
     position: relative;
     overflow: hidden;
 }
@@ -17,13 +17,13 @@
 }
 .orb1 {
     width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(30, 60, 140, 0.25) 0%, transparent 70%);
+    background: radial-gradient(circle, var(--orb1-color) 0%, transparent 70%);
     top: -100px; left: -150px;
     animation: drift1 12s ease-in-out infinite alternate;
 }
 .orb2 {
     width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(10, 80, 60, 0.18) 0%, transparent 70%);
+    background: radial-gradient(circle, var(--orb2-color) 0%, transparent 70%);
     bottom: -80px; right: -80px;
     animation: drift2 15s ease-in-out infinite alternate;
 }
@@ -39,6 +39,30 @@
     max-width: 480px;
     position: relative;
     z-index: 1;
+}
+
+.themeBtn {
+    position: absolute;
+    top: var(--sp-4);
+    right: var(--sp-4);
+    z-index: 10;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--r-sm);
+    color: var(--text-muted);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color var(--t-fast), border-color var(--t-fast), background var(--t-fast);
+    backdrop-filter: blur(8px);
+}
+.themeBtn:hover {
+    color: var(--text-primary);
+    border-color: var(--glass-border-hi);
+    background: var(--glass-bg-hover);
 }
 
 .header { text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--sp-3); }
@@ -90,8 +114,8 @@
     width: 100%;
     padding: 14px 48px 14px 16px;
     border-radius: var(--r-md);
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(77,159,255,0.25);
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
     color: var(--text-primary);
     font-size: 16px;
     font-family: 'Inter', sans-serif;
@@ -162,8 +186,8 @@
     gap: var(--sp-4);
     padding: var(--sp-3) var(--sp-4);
     border-radius: var(--r-md);
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--glass-border);
+    background: var(--surface-item);
+    border: 1px solid var(--border-item);
 }
 
 .howToIcon {

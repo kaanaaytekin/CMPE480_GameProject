@@ -1,0 +1,95 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+}
+
+.inputRow {
+    display: flex;
+    gap: var(--sp-3);
+    padding: 6px 6px 6px 20px;
+    border-radius: var(--r-md);
+    border: 1px solid var(--border-item);
+    background: var(--surface-item);
+    box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,0.04);
+    transition: border-color var(--t-fast), box-shadow var(--t-fast);
+    min-height: 64px;
+    align-items: center;
+}
+
+.inputRow:focus-within:not(.correct):not(.wrong) {
+    border-color: rgba(100, 160, 255, 0.55);
+    box-shadow: var(--blue-glow), var(--shadow-sm);
+}
+
+.correct {
+    border-color: rgba(52, 211, 153, 0.7);
+    background: rgba(15, 70, 45, 0.5);
+    box-shadow: var(--green-glow), var(--shadow-sm);
+}
+
+.wrong {
+    border-color: rgba(248, 113, 113, 0.7);
+    background: rgba(70, 15, 15, 0.5);
+    box-shadow: var(--red-glow), var(--shadow-sm);
+}
+
+.input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+    caret-color: var(--blue);
+}
+
+.input::placeholder {
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.correct .input { color: var(--green); }
+.wrong .input   { color: var(--red); }
+
+.input:disabled {
+    cursor: default;
+}
+
+.submitBtn {
+    flex-shrink: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 10px 22px;
+    border-radius: var(--r-sm);
+    background: rgba(232, 184, 75, 0.14);
+    border: 1px solid rgba(232, 184, 75, 0.4);
+    color: var(--gold);
+    cursor: pointer;
+    transition: background var(--t-fast), border-color var(--t-fast);
+}
+
+.submitBtn:hover:not(:disabled) {
+    background: rgba(232, 184, 75, 0.24);
+    border-color: rgba(232, 184, 75, 0.65);
+}
+
+.submitBtn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.hint {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding-left: 4px;
+}
+
+.hint strong {
+    color: var(--green);
+    font-weight: 600;
+}

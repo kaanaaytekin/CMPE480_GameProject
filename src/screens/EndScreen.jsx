@@ -8,8 +8,11 @@ import { formatMoney } from '../utils/format';
 import s from './EndScreen.module.css';
 
 export function EndScreen({ result, playerName, onRestart }) {
-    const { entries } = useLeaderboard();
-    const { won, walkedAway, lostQuestion, selectedIndex, finalPrize, rank } = result;
+    const { entries, loading } = useLeaderboard();
+    const { won, walkedAway, lostQuestion, selectedIndex, finalPrize } = result;
+    const rank = entries.length > 0
+        ? entries.findIndex(e => e.name === playerName) + 1 || null
+        : null;
 
     return (
         <div className={`${s.screen} ${won ? s.winBg : s.loseBg}`}>
@@ -40,7 +43,9 @@ export function EndScreen({ result, playerName, onRestart }) {
                             {' '}{formatMoney(finalPrize)} TL
                         </strong>
                     </p>
-                    <p className={s.rank}>{playerName} placed #{rank}</p>
+                    <p className={s.rank}>
+                        {loading ? 'Saving score…' : rank ? `${playerName} placed #${rank}` : `${playerName} — score saved!`}
+                    </p>
                 </div>
 
                 {/* Question review (loss only, not walk away) */}
@@ -49,20 +54,58 @@ export function EndScreen({ result, playerName, onRestart }) {
                         <h3 className={s.reviewTitle}>Question Review</h3>
                         <p className={s.reviewQuestion}>{lostQuestion.question}</p>
                         <div className={s.answers}>
-                            <div className={s.answerRow}>
-                                <span className={s.answerBadge} data-type="wrong">Your answer</span>
-                                <span className={s.answerText}>
-                                    {selectedIndex !== null
-                                        ? `${ANSWER_LABELS[selectedIndex]}: ${lostQuestion.options[selectedIndex]}`
-                                        : 'No answer selected'}
-                                </span>
-                            </div>
-                            <div className={s.answerRow}>
-                                <span className={s.answerBadge} data-type="correct">Correct</span>
-                                <span className={s.answerText}>
-                                    {ANSWER_LABELS[lostQuestion.answer]}: {lostQuestion.options[lostQuestion.answer]}
-                                </span>
-                            </div>
+                            {lostQuestion.type === 'fitb' ? (
+                                <>
+                                    <div className={s.answerRow}>
+                                        <span className={s.answerBadge} data-type="wrong">Your answer</span>
+                                        <span className={s.answerText}>
+                                            {selectedIndex != null && selectedIndex !== ''
+                                                ? String(selectedIndex)
+                                                : 'No answer entered'}
+                                        </span>
+                                    </div>
+                                    <div className={s.answerRow}>
+                                        <span className={s.answerBadge} data-type="correct">Correct</span>
+                                        <span className={s.answerText}>
+                                            {lostQuestion.acceptedAnswers?.[0] ?? '—'}
+                                        </span>
+                                    </div>
+                                </>
+                            ) : lostQuestion.type === 'match' ? (
+                                <>
+                                    <div className={s.answerRow}>
+                                        <span className={s.answerBadge} data-type="correct">Correct pairings</span>
+                                    </div>
+                                    {(lostQuestion.pairs ?? []).map((pair, i) => (
+                                        <div key={i} className={s.answerRow}>
+                                            <span className={s.answerText}>
+                                                <strong>{pair.left}</strong> → {pair.right}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </>
+                            ) : (
+                                <>
+                                    <div className={s.answerRow}>
+                                        <span className={s.answerBadge} data-type="wrong">Your answer</span>
+                                        <span className={s.answerText}>
+                                            {selectedIndex !== null && selectedIndex !== undefined
+                                                ? lostQuestion.type === 'tf'
+                                                    ? lostQuestion.options[selectedIndex]
+                                                    : `${ANSWER_LABELS[selectedIndex]}: ${lostQuestion.options[selectedIndex]}`
+                                                : 'No answer selected'}
+                                        </span>
+                                    </div>
+                                    <div className={s.answerRow}>
+                                        <span className={s.answerBadge} data-type="correct">Correct</span>
+                                        <span className={s.answerText}>
+                                            {lostQuestion.type === 'tf'
+                                                ? lostQuestion.options[lostQuestion.answer]
+                                                : `${ANSWER_LABELS[lostQuestion.answer]}: ${lostQuestion.options[lostQuestion.answer]}`}
+                                        </span>
+                                    </div>
+                                </>
+                            )}
                         </div>
                         {lostQuestion.explanation && (
                             <div className={s.explanation}>

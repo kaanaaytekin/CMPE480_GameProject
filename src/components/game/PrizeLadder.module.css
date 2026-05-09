@@ -74,13 +74,13 @@
 
 /* States */
 .current {
-    background: rgba(15, 60, 35, 0.55);
-    border-color: rgba(52, 211, 153, 0.45);
+    background: var(--row-current-bg);
+    border-color: var(--row-current-border);
     box-shadow: 0 0 14px rgba(52, 211, 153, 0.14);
 }
-.current .qnum   { color: var(--green); }
-.current .amount { color: #fff; font-size: 15px; }
-.current .unit   { color: var(--green); }
+.current .qnum      { color: var(--green); }
+.current .amount    { color: var(--row-current-text); font-size: 15px; }
+.current .unit      { color: var(--green); }
 .current .indicator { color: var(--green); }
 
 .past { opacity: 0.28; }
@@ -91,5 +91,5 @@
 .milestone .unit   { color: var(--gold); }
 .milestone {
     border-color: rgba(232, 184, 75, 0.22);
-    background: rgba(92, 60, 8, 0.14);
+    background: var(--row-milestone-bg);
 }

@@ -11,7 +11,7 @@ export function PhoneCall({ open, phoneData, onClose }) {
     }, [open, onClose]);
 
     if (!phoneData) return null;
-    const { expert, suggestionLabel, confident } = phoneData;
+    const { expert, suggestionLabel, confident, isMatch } = phoneData;
 
     return (
         <Modal open={open} onClose={onClose} width={420}>
@@ -31,7 +31,12 @@ export function PhoneCall({ open, phoneData, onClose }) {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 1.2, duration: 0.4 }}
                 >
-                    I think the answer is <strong>{suggestionLabel}</strong>.
+                    {suggestionLabel == null
+                        ? "Hmm, I honestly can't recall the answer to this one."
+                        : isMatch
+                            ? <>I think <strong>{suggestionLabel}</strong>.</>
+                            : <>I think the answer is <strong>{suggestionLabel}</strong>.</>
+                    }
                 </motion.p>
                 <motion.p
                     className={s.confidence}

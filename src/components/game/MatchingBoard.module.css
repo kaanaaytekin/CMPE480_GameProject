@@ -1,0 +1,187 @@
+.board {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+}
+
+.columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-3);
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+}
+
+/* Base item */
+.item {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    width: 100%;
+    min-height: 64px;
+    padding: 12px 16px;
+    border-radius: var(--r-md);
+    border: 1px solid var(--border-item);
+    background: var(--surface-item);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    text-align: left;
+    cursor: pointer;
+    transition: background var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast);
+    box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,0.04);
+    position: relative;
+}
+
+.item:disabled {
+    cursor: default;
+}
+
+.itemRight {
+    padding-right: 40px;
+}
+
+/* States */
+.selected {
+    border-color: rgba(232, 184, 75, 0.75);
+    background: rgba(92, 60, 8, 0.35);
+    box-shadow: var(--gold-glow), var(--shadow-sm);
+}
+
+.connected {
+    border-color: rgba(77, 159, 255, 0.65);
+    background: rgba(14, 36, 72, 0.75);
+    box-shadow: var(--blue-glow), var(--shadow-sm);
+}
+
+.selectable:hover {
+    border-color: rgba(100, 160, 255, 0.55);
+    background: rgba(22, 42, 78, 0.8);
+    box-shadow: var(--blue-glow), var(--shadow-sm);
+}
+
+.correct {
+    border-color: rgba(52, 211, 153, 0.7);
+    background: rgba(15, 70, 45, 0.5);
+    box-shadow: var(--green-glow), var(--shadow-sm);
+    cursor: default;
+}
+
+.wrong {
+    border-color: rgba(248, 113, 113, 0.7);
+    background: rgba(70, 15, 15, 0.5);
+    box-shadow: var(--red-glow), var(--shadow-sm);
+    cursor: default;
+}
+
+/* Left column number badge */
+.num {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--r-xs);
+    background: rgba(77, 159, 255, 0.12);
+    border: 1px solid rgba(77, 159, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--blue);
+}
+
+.correct .num {
+    background: rgba(52, 211, 153, 0.2);
+    border-color: rgba(52, 211, 153, 0.5);
+    color: var(--green);
+}
+
+.wrong .num {
+    background: rgba(248, 113, 113, 0.2);
+    border-color: rgba(248, 113, 113, 0.5);
+    color: var(--red);
+}
+
+/* Item text */
+.text {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--text-primary);
+}
+
+.correct .text { color: var(--green); }
+.wrong .text   { color: var(--red); }
+
+/* Small dot on left item when connected */
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--blue);
+    flex-shrink: 0;
+    box-shadow: 0 0 6px rgba(77, 159, 255, 0.7);
+}
+
+/* Number badge on right items showing which left they're paired to */
+.badge {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: var(--r-xs);
+    background: rgba(77, 159, 255, 0.18);
+    border: 1px solid rgba(77, 159, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--blue);
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Correct pair hint on wrong right items after reveal */
+.hint {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--green);
+    white-space: nowrap;
+    flex-shrink: 0;
+    opacity: 0.85;
+}
+
+/* Submit row */
+.submitRow {
+    display: flex;
+    justify-content: center;
+}
+
+.submitBtn {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 10px 28px;
+    border-radius: var(--r-md);
+    background: rgba(232, 184, 75, 0.15);
+    border: 1px solid rgba(232, 184, 75, 0.45);
+    color: var(--gold);
+    cursor: pointer;
+    transition: background var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast);
+}
+
+.submitBtn:hover {
+    background: rgba(232, 184, 75, 0.25);
+    border-color: rgba(232, 184, 75, 0.7);
+    box-shadow: var(--gold-glow);
+}

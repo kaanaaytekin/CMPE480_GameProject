@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { QUESTION_TIME } from '../../hooks/useTimer';
 import s from './TimerBar.module.css';
 
 export function TimerBar({ timeLeft, ratio }) {

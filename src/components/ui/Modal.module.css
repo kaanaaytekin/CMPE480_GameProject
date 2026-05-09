@@ -12,8 +12,8 @@
 
 .panel {
     width: 100%;
-    background: rgba(10, 18, 36, 0.96);
-    border: 1px solid rgba(77, 159, 255, 0.2);
+    background: var(--modal-bg);
+    border: 1px solid var(--modal-border);
     border-radius: var(--r-xl);
     box-shadow: var(--shadow-xl), 0 0 0 1px rgba(255,255,255,0.04);
     padding: var(--sp-8);

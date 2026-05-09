@@ -11,15 +11,15 @@
     transition: background var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast);
     font-family: 'Inter', sans-serif;
     min-height: 84px;
-    background: rgba(14, 26, 52, 0.65);
-    border-color: rgba(77, 130, 200, 0.35);
+    background: var(--surface-item);
+    border-color: var(--border-item);
     color: var(--text-primary);
     box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
 .btn:not(:disabled):hover {
-    background: rgba(22, 42, 78, 0.8);
-    border-color: rgba(100, 160, 255, 0.55);
+    background: var(--surface-item-hover);
+    border-color: var(--border-item-hi);
     box-shadow: var(--blue-glow), var(--shadow-sm);
 }
 
@@ -95,4 +95,13 @@
     min-height: 70px;
     border-radius: var(--r-md);
     visibility: hidden;
+}
+
+.btnCentered {
+    justify-content: center;
+}
+.btnCentered .text {
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
 }

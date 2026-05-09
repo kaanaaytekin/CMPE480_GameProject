@@ -1,5 +1,5 @@
 import { QUESTIONS, PRIZE_LADDER } from '../data/questions';
-import { DIFFICULTY_PLAN } from '../data/constants';
+import { DIFFICULTY_PLAN, DEMO_MODE } from '../data/constants';
 
 export function shuffle(arr) {
     const a = [...arr];
@@ -29,7 +29,7 @@ export function buildQuestionSet() {
     return DIFFICULTY_PLAN.map(diff => {
         const pool = pools[diff] ?? [];
         const q = pool.shift() ?? QUESTIONS.find(q => q.difficulty === diff) ?? QUESTIONS[0];
-        return shuffleOptions(q);
+        return (DEMO_MODE || q.type === 'tf' || q.type === 'fitb' || q.type === 'match') ? q : shuffleOptions(q);
     });
 }
 
