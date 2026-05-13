@@ -210,6 +210,31 @@
 }
 .walkNo:hover { background: rgba(255,255,255,0.09); }
 
+/* ── Mobile (portrait) ────────────────────────────────── */
+@media (max-width: 700px) {
+    .header {
+        padding: 10px var(--sp-4);
+    }
+    .brand {
+        font-size: 12px;
+    }
+    .prizeValue {
+        font-size: 14px;
+    }
+    .body {
+        flex-direction: column;
+        padding: var(--sp-4);
+        gap: var(--sp-4);
+        min-height: unset;
+    }
+    .answers {
+        grid-template-columns: 1fr;
+    }
+    .answersTF {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
 /* Feedback */
 .feedback {
     text-align: center;

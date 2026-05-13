@@ -72,6 +72,19 @@
     font-size: 12px;
 }
 
+@media (max-width: 700px) {
+    .ladder {
+        width: 100%;
+        position: static;
+        order: 2;
+    }
+    .list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2px;
+    }
+}
+
 /* States */
 .current {
     background: var(--row-current-bg);
