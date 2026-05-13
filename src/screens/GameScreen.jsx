@@ -45,7 +45,8 @@ export function GameScreen({ game }) {
     });
 
     const timerActive = answerState === 'idle' && lifelines.modal === null;
-    const questionDuration = QUESTION_TIMES[currentQuestion?.difficulty] ?? 20;
+    const qTypKey = (currentQuestion?.type ?? 'mcq');
+    const questionDuration = QUESTION_TIMES[currentQuestion?.difficulty]?.[qTypKey] ?? 30;
     const timer = useTimer({ active: timerActive, questionId: currentQuestion?.id, duration: questionDuration });
     timer.setOnExpire(timeUp);
 

@@ -3,11 +3,11 @@ export const ANSWER_LABELS = ['A', 'B', 'C', 'D'];
 /* Set to true during demos — correct answer will always appear as option A */
 export const DEMO_MODE = false;
 
-/* Seconds allowed per difficulty level */
+/* Seconds allowed per difficulty × question type */
 export const QUESTION_TIMES = {
-    easy:   20,
-    medium: 40,
-    hard:   60,
+    easy:   { mcq: 25, tf: 25, fitb: 45, match: 50 },
+    medium: { mcq: 40, tf: 40, fitb: 60, match: 70 },
+    hard:   { mcq: 60, tf: 60, fitb: 90, match: 100 },
 };
 
 export const DIFFICULTY_LABELS = {
