@@ -205,7 +205,7 @@ export function WelcomeScreen({ playerName, onStart }) {
                         {
                             icon: '🔗',
                             title: 'Matching',
-                            desc: 'Two columns of items are displayed. Click a left-side item to select it (highlighted in blue), then click the right-side item you want to pair it with. You can re-pair items at any time. When all pairs are connected, a "Confirm All Pairs" button appears — click it to submit your answer.',
+                            desc: 'Two columns of items are displayed. Click any item on either side to start — then click its match on the other side to pair them. You can re-pair items at any time, or use "Remove All" to start over. When all pairs are connected, a "Confirm All Pairs" button appears — click it to submit your answer.',
                         },
                     ].map(({ icon, title, desc }) => (
                         <div key={title} className={s.howToItem}>
