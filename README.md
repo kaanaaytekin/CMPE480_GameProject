@@ -1,49 +1,62 @@
-# ISO 29119 Millionaire
+# 🏆 ISO/IEC/IEEE 29119 Millionaire
 
 > A *Who Wants to Be a Millionaire*-style interactive quiz game built to make learning the **ISO/IEC/IEEE 29119** software testing standards engaging and effective.
 >
 > Developed for **CMPE 480 — International Standards on Software Engineering**
 
+**Live demo:** [iso29119-millionaire.vercel.app](https://iso29119-millionaire.vercel.app)
+
 ---
 
 ## Overview
 
-ISO 29119 Millionaire turns the ISO/IEC/IEEE 29119 standard into a competitive classroom experience. Students answer progressively harder questions about software testing processes, documentation, test design techniques, and keyword-driven testing — all within a polished game interface featuring a live leaderboard, lifelines, and a prize ladder up to **1,000,000 TL**.
+ISO/IEC/IEEE 29119 Millionaire turns the ISO/IEC/IEEE 29119 standard into a competitive classroom experience. Students answer progressively harder questions about software testing processes, documentation, test design techniques, and keyword-driven testing — all within a polished game interface featuring a live leaderboard, lifelines, and a prize ladder up to **1,000,000 TL**.
 
-The game is designed to run in any modern browser, supports 30+ concurrent players through a shared real-time leaderboard powered by Supabase, and can be deployed to production in minutes via Vercel.
+The game supports 30+ concurrent players through a shared real-time leaderboard powered by Supabase, and runs in any modern browser without installation.
 
 ---
 
 ## Features
 
-### Gameplay
+### 🎮 Gameplay
 - **150-question pool** — 50 easy, 50 medium, 50 hard; drawn from all 5 parts of ISO/IEC/IEEE 29119
 - **4 question types** — Multiple Choice (MCQ), True/False, Fill in the Blank (FITB), and Matching
 - **10 questions per game** — 3 easy → 3 medium → 4 hard, randomly selected each playthrough
 - **Prize ladder** — climb from 1,000 TL to 1,000,000 TL
 - **Safe haven milestones** — Q3 (5,000 TL) and Q6 (50,000 TL) are guaranteed prizes
-- **Per-difficulty timers** — 20s / 40s / 60s for easy / medium / hard questions
-- **End screen** — wrong-answer review with correct answer and full explanation
+- **Per-type timers** — each question type and difficulty has its own time limit (see table below)
+- **End screen** — wrong-answer review with the correct answer and a full explanation
 
-### Lifelines
+#### ⏱ Time Limits
+
+| Difficulty | MCQ / T/F | Fill in the Blank | Matching |
+|------------|-----------|-------------------|----------|
+| Easy       | 25 s      | 45 s              | 50 s     |
+| Medium     | 40 s      | 60 s              | 70 s     |
+| Hard       | 60 s      | 90 s              | 100 s    |
+
+### 🃏 Lifelines
+
 | Lifeline | Effect | Available for |
 |----------|--------|---------------|
 | **50 : 50** | Removes two wrong options | MCQ only |
-| **Phone a Friend** | Expert gives a hint (90% accurate) | MCQ, T/F, FITB, Matching |
+| **Phone a Friend** | Expert gives a hint (~90% accurate) | MCQ, T/F, FITB, Matching |
 | **Ask the Audience** | Bar chart showing audience vote distribution | MCQ only |
 
-### Leaderboard
-- **Real-time** — updates instantly as other players finish their game (Supabase Realtime)
-- **Shared across devices** — all 30 students see the same leaderboard
-- **Visible on both Welcome and End screens**
-- Shows player name, score, and result (WIN / LEFT / OUT)
+Each lifeline can be used once per game.
 
-### UI / UX
-- **Dark and light mode** with a toggle in both screens
-- Ambient animated background with floating orbs
+### 📊 Leaderboard
+- **Real-time** — updates instantly as other players finish their game (Supabase Realtime)
+- **Shared across devices** — all students see the same leaderboard simultaneously
+- Visible on both the Welcome and End screens
+- Shows player name, score, and result (WIN / WALKED AWAY / OUT)
+
+### ✨ UI / UX
+- **Dark and light mode** with a toggle in both game screens
 - Smooth entrance animations powered by Framer Motion
-- Fully responsive — works on laptop, tablet, and mobile
-- **How to Play**, **ISO 29119**, **ISO 29119-5**, and **Question Types** modals on the welcome screen
+- Bi-directional matching — click either column to start pairing items
+- Fully responsive — works on desktop, tablet, and mobile
+- **How to Play**, **ISO/IEC/IEEE 29119**, **ISO/IEC/IEEE 29119-5**, and **Question Types** info modals on the welcome screen
 
 ---
 
@@ -70,7 +83,7 @@ The game is designed to run in any modern browser, supports 30+ concurrent playe
 ### Installation
 
 ```bash
-git clone https://github.com/deldhinoR/CMPE480_GameProject.git
+git clone https://github.com/kaanaaytekin/CMPE480_GameProject.git
 cd CMPE480_GameProject
 npm install
 ```
@@ -88,9 +101,6 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 
 ```bash
 npm run dev       # http://localhost:5173
-```
-
-```bash
 npm run build     # production build → dist/
 npm run preview   # preview the production build locally
 ```
@@ -124,13 +134,13 @@ Then enable **Realtime** for the `scores` table:
 
 ## Deployment (Vercel)
 
-1. Fork or push the repository to your GitHub account
+1. Push the repository to your GitHub account
 2. Go to [vercel.com](https://vercel.com) → **Add New Project** → import the repository
 3. Vercel auto-detects **Vite** — no build settings changes needed
 4. Add the environment variables under **Project Settings → Environment Variables**:
    - `VITE_SUPABASE_URL`
    - `VITE_SUPABASE_ANON_KEY`
-5. Click **Deploy** — your game will be live at a `*.vercel.app` URL
+5. Click **Deploy**
 
 Every `git push` to `main` triggers an automatic redeployment.
 
@@ -181,7 +191,7 @@ src/
     difficulty: 'easy',           // 'easy' | 'medium' | 'hard'
     question: 'Question text?',
     options: ['Correct answer', 'Wrong A', 'Wrong B', 'Wrong C'],
-    answer: 0,                    // index of correct option (always 0 in source)
+    answer: 0,                    // index of the correct option
     explanation: 'Why this is correct.'
 }
 ```
@@ -233,7 +243,7 @@ src/
 
 ---
 
-## Course Context
+## Course Coverage
 
 This project covers the full **ISO/IEC/IEEE 29119** family:
 
