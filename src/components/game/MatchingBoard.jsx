@@ -3,17 +3,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { shuffle } from '../../utils/game';
 import s from './MatchingBoard.module.css';
 
-function leftCls(isSelected, isConnected, state, isRevealed, css) {
+function leftCls(isSelected, isConnected, isSelectable, state, isRevealed, css) {
     let c = css.item;
     if (isRevealed) c += ' ' + (state === 'correct' ? css.correct : css.wrong);
     else if (isSelected) c += ' ' + css.selected;
     else if (isConnected) c += ' ' + css.connected;
+    else if (isSelectable) c += ' ' + css.selectable;
     return c;
 }
 
-function rightCls(isConnected, isSelectable, state, isRevealed, css) {
+function rightCls(isSelected, isConnected, isSelectable, state, isRevealed, css) {
     let c = css.item + ' ' + css.itemRight;
     if (isRevealed) c += ' ' + (state === 'correct' ? css.correct : css.wrong);
+    else if (isSelected) c += ' ' + css.selected;
     else if (isConnected) c += ' ' + css.connected;
     else if (isSelectable) c += ' ' + css.selectable;
     return c;
@@ -21,18 +23,21 @@ function rightCls(isConnected, isSelectable, state, isRevealed, css) {
 
 export function MatchingBoard({ pairs, questionId, answerState, onSubmit }) {
     const [rightItems, setRightItems] = useState(() => shuffle(pairs.map(p => p.right)));
-    const [leftSelected, setLeftSelected] = useState(null);
-    const [connections, setConnections] = useState({}); // leftIdx → rightIdx
+    const [leftSelected, setLeftSelected]   = useState(null); // index into pairs
+    const [rightSelected, setRightSelected] = useState(null); // index into rightItems
+    const [connections, setConnections] = useState({});        // leftIdx → rightIdx
 
     useEffect(() => {
         setRightItems(shuffle(pairs.map(p => p.right)));
         setLeftSelected(null);
+        setRightSelected(null);
         setConnections({});
     }, [questionId]);
 
-    const isLocked   = answerState !== 'idle';
-    const isRevealed = answerState === 'revealed';
+    const isLocked     = answerState !== 'idle';
+    const isRevealed   = answerState === 'revealed';
     const allConnected = Object.keys(connections).length === pairs.length;
+    const anyConnected = Object.keys(connections).length > 0;
 
     const getLeftState = (i) => {
         if (!isRevealed) return 'idle';
@@ -52,35 +57,70 @@ export function MatchingBoard({ pairs, questionId, answerState, onSubmit }) {
         return k !== undefined ? +k : null;
     };
 
-    const handleLeftClick = (i) => {
-        if (isLocked) return;
-        setLeftSelected(prev => prev === i ? null : i);
-    };
-
-    const handleRightClick = (j) => {
-        if (isLocked || leftSelected === null) return;
+    const connect = (leftIdx, rightIdx) => {
         setConnections(prev => {
             const next = { ...prev };
-            Object.keys(next).forEach(k => { if (next[+k] === j) delete next[+k]; });
-            next[leftSelected] = j;
+            // remove any existing mapping to this right item
+            Object.keys(next).forEach(k => { if (next[+k] === rightIdx) delete next[+k]; });
+            next[leftIdx] = rightIdx;
             return next;
         });
         setLeftSelected(null);
+        setRightSelected(null);
     };
+
+    const handleLeftClick = (i) => {
+        if (isLocked) return;
+        if (rightSelected !== null) {
+            // right was waiting — complete the pair
+            connect(i, rightSelected);
+        } else {
+            // toggle left selection
+            setLeftSelected(prev => prev === i ? null : i);
+        }
+    };
+
+    const handleRightClick = (j) => {
+        if (isLocked) return;
+        if (leftSelected !== null) {
+            // left was waiting — complete the pair
+            connect(leftSelected, j);
+        } else {
+            // toggle right selection
+            setRightSelected(prev => prev === j ? null : j);
+        }
+    };
+
+    const handleRemoveAll = () => {
+        setConnections({});
+        setLeftSelected(null);
+        setRightSelected(null);
+    };
+
+    const instruction = leftSelected !== null
+        ? 'Now click its match on the right.'
+        : rightSelected !== null
+            ? 'Now click its match on the left.'
+            : 'Click any item on either side to start matching.';
 
     return (
         <div className={s.board}>
+            {!isRevealed && (
+                <p className={s.instruction}>{instruction}</p>
+            )}
+
             <div className={s.columns}>
-                {/* Left column — terms */}
+                {/* Left column */}
                 <div className={s.col}>
                     {pairs.map((pair, i) => {
                         const isSelected  = leftSelected === i;
                         const isConnected = connections[i] !== undefined;
-                        const state       = getLeftState(i);
+                        const isSelectable = !isLocked && rightSelected !== null && !isSelected;
+                        const state = getLeftState(i);
                         return (
                             <motion.button
                                 key={i}
-                                className={leftCls(isSelected, isConnected && !isSelected, state, isRevealed, s)}
+                                className={leftCls(isSelected, isConnected && !isSelected, isSelectable, state, isRevealed, s)}
                                 onClick={() => handleLeftClick(i)}
                                 disabled={isLocked}
                                 initial={{ opacity: 0, x: -14 }}
@@ -97,28 +137,28 @@ export function MatchingBoard({ pairs, questionId, answerState, onSubmit }) {
                     })}
                 </div>
 
-                {/* Right column — definitions (shuffled) */}
+                {/* Right column */}
                 <div className={s.col}>
                     {rightItems.map((text, j) => {
-                        const cLeft      = connectedLeftFor(j);
-                        const state      = getRightState(j);
+                        const isSelected  = rightSelected === j;
+                        const cLeft       = connectedLeftFor(j);
                         const isConnected = cLeft !== null;
-                        const isSelectable = !isLocked && leftSelected !== null;
-                        // Correct right label for wrong items on reveal
+                        const isSelectable = !isLocked && leftSelected !== null && !isSelected;
+                        const state = getRightState(j);
                         const correctLeft = isRevealed && state === 'wrong'
                             ? pairs.find(p => p.right === text)?.left
                             : null;
                         return (
                             <motion.button
                                 key={j}
-                                className={rightCls(isConnected && !isRevealed, isSelectable, state, isRevealed, s)}
+                                className={rightCls(isSelected, isConnected && !isRevealed && !isSelected, isSelectable, state, isRevealed, s)}
                                 onClick={() => handleRightClick(j)}
                                 disabled={isLocked}
                                 initial={{ opacity: 0, x: 14 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: j * 0.07, type: 'spring', stiffness: 300, damping: 24 }}
-                                whileHover={isSelectable ? { scale: 1.015 } : {}}
-                                whileTap={isSelectable ? { scale: 0.985 } : {}}
+                                whileHover={(!isLocked && (isSelectable || isSelected)) ? { scale: 1.015 } : {}}
+                                whileTap={(!isLocked && (isSelectable || isSelected)) ? { scale: 0.985 } : {}}
                             >
                                 {isConnected && !isRevealed && (
                                     <span className={s.badge}>{cLeft + 1}</span>
@@ -133,23 +173,36 @@ export function MatchingBoard({ pairs, questionId, answerState, onSubmit }) {
                 </div>
             </div>
 
-            <AnimatePresence>
-                {!isLocked && allConnected && (
-                    <motion.div
-                        className={s.submitRow}
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}
-                    >
-                        <button
-                            className={s.submitBtn}
-                            onClick={() => onSubmit({ connections, rightItems })}
-                        >
-                            Confirm All Pairs
-                        </button>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {!isLocked && (
+                <div className={s.submitRow}>
+                    <AnimatePresence>
+                        {anyConnected && (
+                            <motion.button
+                                className={s.removeBtn}
+                                onClick={handleRemoveAll}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                            >
+                                Remove All
+                            </motion.button>
+                        )}
+                    </AnimatePresence>
+                    <AnimatePresence>
+                        {allConnected && (
+                            <motion.button
+                                className={s.submitBtn}
+                                onClick={() => onSubmit({ connections, rightItems })}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                            >
+                                Confirm All Pairs
+                            </motion.button>
+                        )}
+                    </AnimatePresence>
+                </div>
+            )}
         </div>
     );
 }

@@ -159,10 +159,27 @@
     opacity: 0.85;
 }
 
+/* Instruction banner */
+.instruction {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: var(--gold);
+    background: rgba(232, 184, 75, 0.1);
+    border: 1px solid rgba(232, 184, 75, 0.3);
+    border-radius: var(--r-md);
+    padding: 8px 16px;
+    margin: 0;
+    box-shadow: var(--gold-glow);
+}
+
 /* Submit row */
 .submitRow {
     display: flex;
     justify-content: center;
+    gap: var(--sp-3);
+    flex-wrap: wrap;
 }
 
 .submitBtn {
@@ -184,4 +201,25 @@
     background: rgba(232, 184, 75, 0.25);
     border-color: rgba(232, 184, 75, 0.7);
     box-shadow: var(--gold-glow);
+}
+
+.removeBtn {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 10px 22px;
+    border-radius: var(--r-md);
+    background: rgba(248, 113, 113, 0.1);
+    border: 1px solid rgba(248, 113, 113, 0.35);
+    color: var(--red);
+    cursor: pointer;
+    transition: background var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast);
+}
+
+.removeBtn:hover {
+    background: rgba(248, 113, 113, 0.2);
+    border-color: rgba(248, 113, 113, 0.6);
+    box-shadow: var(--red-glow);
 }
