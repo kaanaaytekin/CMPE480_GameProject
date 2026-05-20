@@ -69,7 +69,7 @@ export function GameScreen({ game }) {
             <header className={s.header}>
                 <div className={s.headerLeft}>
                     <span className={s.diamond}>◆</span>
-                    <span className={s.brand}>ISO 29119 Millionaire</span>
+                    <span className={s.brand}>ISO/IEC/IEEE 29119 Millionaire</span>
                 </div>
                 <div className={s.headerRight}>
                     <button className={s.muteBtn} onClick={toggleTheme} title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>

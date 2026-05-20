@@ -11,11 +11,11 @@ import s from './WelcomeScreen.module.css';
 
 const INFO = {
     '29119': {
-        title: 'What is ISO 29119?',
+        title: 'What is ISO/IEC/IEEE 29119?',
         body: 'ISO/IEC/IEEE 29119 is an international family of software testing standards. It provides guidance for test processes, test documentation, test design techniques, and related activities. The goal is to help teams plan, perform, monitor, control, and improve testing in a consistent and structured way.',
     },
     '29119-5': {
-        title: 'What is ISO 29119-5?',
+        title: 'What is ISO/IEC/IEEE 29119-5?',
         body: 'ISO/IEC/IEEE 29119-5 focuses on keyword-driven testing. In this approach, reusable keywords represent test actions or business steps. Testers can combine keywords with data to create readable, maintainable, and reusable test cases, especially for automation.',
     },
 };
@@ -89,7 +89,7 @@ export function WelcomeScreen({ playerName, onStart }) {
                     >
                         <span className={s.diamond}>◆</span>
                     </motion.div>
-                    <h1 className={s.title}>ISO 29119<br />Millionaire</h1>
+                    <h1 className={s.title}>ISO/IEC/IEEE 29119<br />Millionaire</h1>
                     <p className={s.subtitle}>
                         Test your knowledge of software testing standards.<br />
                         Answer 10 questions — win up to <strong>1,000,000 TL</strong>.
@@ -132,8 +132,8 @@ export function WelcomeScreen({ playerName, onStart }) {
                     variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.4 } } }}
                 >
                     <Button variant="ghost" onClick={() => setShowHowTo(true)}>How to Play</Button>
-                    <Button variant="ghost" onClick={() => setInfoKey('29119')}>ISO 29119</Button>
-                    <Button variant="ghost" onClick={() => setInfoKey('29119-5')}>ISO 29119-5</Button>
+                    <Button variant="ghost" onClick={() => setInfoKey('29119')}>ISO/IEC/IEEE 29119</Button>
+                    <Button variant="ghost" onClick={() => setInfoKey('29119-5')}>ISO/IEC/IEEE 29119-5</Button>
                     <Button variant="ghost" onClick={() => setShowQTypes(true)}>Question Types</Button>
                 </motion.div>
 
